@@ -6,12 +6,12 @@ const globalStyles = `
   * {
     box-sizing: border-box;
   }
-  body {
+  body, html {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden; /* Bloqueia completamente o scroll da tela */
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
     background-color: whitesmoke;
     background-image: url("./assets/images/clouds.png");
     background-position: center;
@@ -20,6 +20,26 @@ const globalStyles = `
     background-size: cover;
     font-family: "Montserrat", system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
+  }
+  #root {
+    height: 100%;
+  }
+  .responsive-card {
+    max-width: 380px;
+    transition: max-width 0.3s ease;
+  }
+  @media (min-width: 768px) {
+    .responsive-card {
+      max-width: 600px;
+    }
+  }
+  .forecast-scroll-container {
+    overflow-x: auto;
+    scrollbar-width: none;
+    ms-overflow-style: none;
+  }
+  .forecast-scroll-container::-webkit-scrollbar {
+    display: none;
   }
 `;
 
@@ -93,7 +113,7 @@ export default function App() {
   const country = locationData?.address?.country ?? "";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
       <style>{globalStyles}</style>
       <main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <SearchPage
