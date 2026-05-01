@@ -26,8 +26,7 @@ export function TopSearchBar({ onSearch, isLoading }) {
       padding: "16px",
       display: "flex",
       justifyContent: "center",
-      position: "sticky",
-      top: 0,
+      flexShrink: 0,
       zIndex: 10,
     },
     form: {

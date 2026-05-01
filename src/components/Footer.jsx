@@ -15,9 +15,7 @@ export function Footer() {
       display: "flex",
       justifyContent: "flex-end",
       boxSizing: "border-box",
-      position: "fixed",
-      bottom: 0,
-      left: 0,
+      flexShrink: 0,
       zIndex: 10
     },
     link: {
