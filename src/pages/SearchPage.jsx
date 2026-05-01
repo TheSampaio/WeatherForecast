@@ -2,39 +2,44 @@ import { Footer } from "../components/Footer";
 import { TopSearchBar } from "../components/TopSearchBar";
 import { WeatherCard } from "../components/WeatherCard";
 
+const unknownCityTranslations = {
+  en: "Unknown City",
+  es: "Ciudad Desconocida",
+  pt: "Cidade Desconhecida",
+};
+
 export function SearchPage({
-  country = "",
-  city = "Unknown City",
-  temperature = 0,
-  minTemperature = 0,
-  maxTemperature = 0,
-  weatherCode = -1,
+  country,
+  city,
+  currentTemperature,
+  minTemperature,
+  maxTemperature,
+  weatherCode,
+  daily,
   onSearch,
+  isLoading,
+  error
 }) {
   const lang = (navigator.language || "en").split("-")[0];
-
-  const unknownCityTranslations = {
-    en: "Unknown City",
-    es: "Ciudad Desconocida",
-    pt: "Cidade Desconhecida",
-  };
-
-  const translatedCity =
-    city === "Unknown City"
-      ? unknownCityTranslations[lang] || unknownCityTranslations["en"]
-      : city;
+  
+  const translatedCity = city === "Unknown City"
+    ? unknownCityTranslations[lang] || unknownCityTranslations["en"]
+    : city;
 
   return (
     <>
-      <TopSearchBar onSearch={onSearch} />
+      <TopSearchBar onSearch={onSearch} isLoading={isLoading} />
       <WeatherCard
         country={country}
         city={translatedCity}
-        temperature={temperature}
+        currentTemperature={currentTemperature}
         minTemperature={minTemperature}
         maxTemperature={maxTemperature}
         weatherCode={weatherCode}
+        daily={daily}
         language={lang}
+        isLoading={isLoading}
+        error={error}
       />
       <Footer />
     </>

@@ -1,32 +1,72 @@
 import { useState } from "react";
-import "./TopSearchBar.css";
 
-export function TopSearchBar({ onSearch }) {
+const placeholders = {
+  en: "Search for a city...",
+  es: "Busca una ciudad...",
+  pt: "Busque por uma cidade...",
+};
+
+export function TopSearchBar({ onSearch, isLoading }) {
   const [query, setQuery] = useState("");
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      onSearch(query);
-    }
-  };
-
-  const placeholders = {
-    en: "Search for a city...",
-    es: "Busca una ciudad...",
-    pt: "Busque por uma cidade...",
-  };
-
   const lang = (navigator.language || "en").split("-")[0];
   const placeholderText = placeholders[lang] || placeholders["en"];
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      onSearch(query.trim());
+      setQuery("");
+    }
+  };
+
+  const styles = {
+    container: {
+      width: "100%",
+      backgroundColor: "#200b64",
+      padding: "16px",
+      display: "flex",
+      justifyContent: "center",
+      position: "sticky",
+      top: 0,
+      zIndex: 10,
+    },
+    form: {
+      position: "relative",
+      width: "100%",
+      maxWidth: "360px",
+    },
+    icon: {
+      position: "absolute",
+      left: "16px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      width: "20px",
+      height: "20px",
+      color: "#888",
+      pointerEvents: "none",
+    },
+    input: {
+      backgroundColor: "whitesmoke",
+      border: "none",
+      borderRadius: "8px",
+      fontSize: "1rem",
+      padding: "12px 16px 12px 48px",
+      width: "100%",
+      outline: "none",
+      color: "#333",
+      boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)"
+    }
+  };
+
   return (
-    <div className="top-search-bar-container">
-      <div className="search-input-wrapper">
+    <header style={styles.container}>
+      <form style={styles.form} onSubmit={handleSubmit}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="search-icon"
+          style={styles.icon}
+          aria-hidden="true"
         >
           <path
             fillRule="evenodd"
@@ -36,14 +76,15 @@ export function TopSearchBar({ onSearch }) {
         </svg>
 
         <input
-          className="top-search-bar-entry"
+          style={{ ...styles.input, opacity: isLoading ? 0.7 : 1 }}
           placeholder={placeholderText}
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
+          disabled={isLoading}
+          aria-label={placeholderText}
         />
-      </div>
-    </div>
+      </form>
+    </header>
   );
 }
