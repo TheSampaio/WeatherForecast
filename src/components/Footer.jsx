@@ -1,19 +1,42 @@
-import "./Footer.css";
+const footers = {
+  en: "Weather Forecast",
+  es: "Pronóstico del tiempo",
+  pt: "Previsão do Tempo",
+};
 
 export function Footer() {
-  const lang = (navigator.language || "es").split("-")[0];
+  const lang = (navigator.language || "en").split("-")[0];
 
-  const footers = {
-    en: "Weather Forecast",
-    es: "Pronóstico del tiempo",
-    pt: "Previsão do Tempo",
+  const styles = {
+    container: {
+      width: "100%",
+      backgroundColor: "#200b64",
+      padding: "16px",
+      display: "flex",
+      justifyContent: "flex-end",
+      boxSizing: "border-box",
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      zIndex: 10
+    },
+    link: {
+      color: "white",
+      fontSize: "14px",
+      textDecoration: "none",
+    }
   };
 
   return (
-    <div className="footer-container">
-      <a href="https://github.com/TheSampaio/weather-forecast-spa">
-        {footers[lang] || footers["es"]} © 2025 Cairox
+    <footer style={styles.container}>
+      <a 
+        style={styles.link} 
+        href="https://github.com/TheSampaio/weather-forecast-spa"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {footers[lang] || footers["en"]} © {new Date().getFullYear()} Cairox
       </a>
-    </div>
+    </footer>
   );
 }
