@@ -83,11 +83,10 @@ export function WeatherCard({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      padding: "24px 16px",
+      padding: "24px 16px 72px 16px",
     },
     card: {
       width: "100%",
-      maxWidth: "380px",
       padding: "36px 24px",
       borderRadius: "12px",
       backgroundColor: "#200b64",
@@ -129,37 +128,35 @@ export function WeatherCard({
     minmaxValue: { margin: "4px 0 0", fontSize: "1.2rem", fontWeight: "bold" },
     separator: { width: "2px", backgroundColor: "rgba(255,255,255,0.2)" },
     
-    /* Alterado para display Flex com scroll horizontal */
     forecastGrid: {
       width: "100%",
       display: "flex",
       flexDirection: "row",
-      gap: "24px",
+      gap: "16px",
       background: "rgba(0, 0, 0, 0.25)",
       borderRadius: "12px",
       padding: "16px",
-      overflowX: "auto",
-      scrollbarWidth: "none", /* Esconde a barra no Firefox */
-      msOverflowStyle: "none", /* Esconde a barra no IE/Edge */
+      scrollbarWidth: "none", 
+      msOverflowStyle: "none", 
     },
     forecastCol: { 
       display: "flex", 
       flexDirection: "column", 
       alignItems: "center", 
-      gap: "4px",
-      minWidth: "48px", /* Garante que as colunas não fiquem espremidas */
-      flexShrink: 0 /* Impede que os itens encolham ao dar scroll */
+      gap: "8px",
+      minWidth: "72px", 
+      flexShrink: 0 
     },
-    forecastDay: { fontSize: "0.8rem", fontWeight: "bold", color: "#d1d1f0" },
-    forecastIcon: { width: "32px", height: "32px" },
-    forecastTempMax: { fontSize: "0.9rem", fontWeight: "bold" },
-    forecastTempMin: { fontSize: "0.8rem", color: "#a0a0c0" }
+    forecastDay: { fontSize: "0.85rem", fontWeight: "bold", color: "#d1d1f0", letterSpacing: "0.5px" },
+    forecastIcon: { width: "38px", height: "38px" },
+    forecastTempMax: { fontSize: "1rem", fontWeight: "bold" },
+    forecastTempMin: { fontSize: "0.9rem", color: "#a0a0c0" }
   };
 
   if (isLoading) {
     return (
       <div style={styles.container}>
-        <section style={{ ...styles.card, ...styles.status }}>Loading weather data...</section>
+        <section className="responsive-card" style={{ ...styles.card, ...styles.status }}>Loading weather data...</section>
       </div>
     );
   }
@@ -167,7 +164,7 @@ export function WeatherCard({
   if (error) {
     return (
       <div style={styles.container}>
-        <section style={{ ...styles.card, ...styles.status, ...styles.error }}>{error}</section>
+        <section className="responsive-card" style={{ ...styles.card, ...styles.status, ...styles.error }}>{error}</section>
       </div>
     );
   }
@@ -179,16 +176,30 @@ export function WeatherCard({
 
   return (
     <div style={styles.container}>
-      {/* Estilo global injetado para esconder a scrollbar no Chrome/Safari no elemento de previsão */}
       <style>
         {`
+          .responsive-card {
+            max-width: 380px;
+            transition: max-width 0.3s ease;
+          }
+          
+          .forecast-scroll-container {
+            overflow-x: auto;
+          }
+          
           .forecast-scroll-container::-webkit-scrollbar {
             display: none;
+          }
+
+          @media (min-width: 768px) {
+            .responsive-card {
+              max-width: 600px; /* Limitado em 600px conforme solicitado */
+            }
           }
         `}
       </style>
 
-      <section style={styles.card} aria-label="Weather Information">
+      <section className="responsive-card" style={styles.card} aria-label="Weather Information">
         <header style={{ textAlign: "center" }}>
           <h2 style={styles.city}>{city}</h2>
           {country && <p style={styles.country}>{country}</p>}
