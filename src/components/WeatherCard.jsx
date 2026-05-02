@@ -83,11 +83,13 @@ export function WeatherCard({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      padding: "24px 16px 72px 16px",
+      padding: "16px",
+      overflow: "hidden",
     },
     card: {
       width: "100%",
-      padding: "36px 24px",
+      maxHeight: "100%",
+      padding: "24px",
       borderRadius: "12px",
       backgroundColor: "#200b64",
       backgroundImage: "url('../assets/images/clouds.png')",
@@ -100,6 +102,9 @@ export function WeatherCard({
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      overflowY: "auto",
+      msOverflowStyle: "none", 
+      scrollbarWidth: "none",
     },
     status: {
       padding: "40px",
@@ -110,18 +115,18 @@ export function WeatherCard({
     error: { color: "#ff6b6b", fontWeight: 500 },
     city: { margin: "0", fontSize: "1.8rem", fontWeight: "bold", textAlign: "center" },
     country: { margin: "4px 0 16px", fontSize: "1rem", fontWeight: 500, color: "#d1d1f0" },
-    figure: { margin: "0 0 16px", display: "flex", flexDirection: "column", alignItems: "center" },
-    image: { width: "120px", height: "120px", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))" },
+    figure: { margin: "0 0 12px", display: "flex", flexDirection: "column", alignItems: "center" },
+    image: { width: "110px", height: "110px", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))" },
     description: { marginTop: "8px", fontSize: "1.1rem", fontStyle: "italic", color: "#eee" },
-    degrees: { margin: "0 0 24px", fontSize: "3rem", fontWeight: "bold" },
+    degrees: { margin: "0 0 20px", fontSize: "3rem", fontWeight: "bold" },
     minmaxContainer: {
       width: "100%",
       display: "flex",
       justifyContent: "center",
       gap: "24px",
-      marginBottom: "24px",
+      marginBottom: "20px",
       borderBottom: "1px solid rgba(255,255,255,0.1)",
-      paddingBottom: "24px"
+      paddingBottom: "20px"
     },
     minmaxBox: { display: "flex", flexDirection: "column", alignItems: "center" },
     minmaxTitle: { margin: 0, fontSize: "0.9rem", color: "#d1d1f0" },
@@ -182,6 +187,9 @@ export function WeatherCard({
             max-width: 380px;
             transition: max-width 0.3s ease;
           }
+          .responsive-card::-webkit-scrollbar {
+            display: none;
+          }
           
           .forecast-scroll-container {
             overflow-x: auto;
@@ -193,7 +201,7 @@ export function WeatherCard({
 
           @media (min-width: 768px) {
             .responsive-card {
-              max-width: 600px; /* Limitado em 600px conforme solicitado */
+              max-width: 600px;
             }
           }
         `}

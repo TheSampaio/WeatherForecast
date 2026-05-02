@@ -9,6 +9,9 @@ const globalStyles = `
   body {
     margin: 0;
     padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden; /* Bloqueia completamente o scroll da tela */
     background-color: whitesmoke;
     background-image: url("./assets/images/clouds.png");
     background-position: center;
@@ -90,9 +93,9 @@ export default function App() {
   const country = locationData?.address?.country ?? "";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
       <style>{globalStyles}</style>
-      <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <SearchPage
           country={country}
           city={city}
