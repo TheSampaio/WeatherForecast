@@ -41,6 +41,18 @@ const globalStyles = `
   .forecast-scroll-container::-webkit-scrollbar {
     display: none;
   }
+  @keyframes pulse-animation {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+  }
+  .loading-icon {
+    animation: pulse-animation 1.5s infinite ease-in-out;
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  }
 `;
 
 const extractCity = (address) => {
