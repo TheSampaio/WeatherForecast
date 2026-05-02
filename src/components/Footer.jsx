@@ -33,7 +33,7 @@ export function Footer() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        {footers[lang] || footers["en"]} © {new Date().getFullYear()} Cairox
+        {footers[lang] || footers["en"]} © 2025-2026 Cairox
       </a>
     </footer>
   );

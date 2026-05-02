@@ -88,8 +88,7 @@ export function WeatherCard({
     },
     card: {
       width: "100%",
-      maxHeight: "100%",
-      padding: "24px",
+      height: "100%",
       borderRadius: "12px",
       backgroundColor: "#200b64",
       backgroundImage: "url('../assets/images/clouds.png')",
@@ -102,37 +101,36 @@ export function WeatherCard({
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      overflowY: "auto",
-      msOverflowStyle: "none", 
-      scrollbarWidth: "none",
+      justifyContent: "space-evenly",
+      padding: "16px 24px",
+      overflow: "hidden",
     },
     status: {
-      padding: "40px",
       fontSize: "1.2rem",
       color: "#d1d1f0",
-      textAlign: "center"
+      textAlign: "center",
     },
     error: { color: "#ff6b6b", fontWeight: 500 },
-    city: { margin: "0", fontSize: "1.8rem", fontWeight: "bold", textAlign: "center" },
-    country: { margin: "4px 0 16px", fontSize: "1rem", fontWeight: 500, color: "#d1d1f0" },
-    figure: { margin: "0 0 12px", display: "flex", flexDirection: "column", alignItems: "center" },
-    image: { width: "110px", height: "110px", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))" },
-    description: { marginTop: "8px", fontSize: "1.1rem", fontStyle: "italic", color: "#eee" },
-    degrees: { margin: "0 0 20px", fontSize: "3rem", fontWeight: "bold" },
+    headerBox: { textAlign: "center", flexShrink: 1, display: "flex", flexDirection: "column", justifyContent: "center" },
+    city: { margin: "0", fontSize: "1.8rem", fontWeight: "bold" },
+    country: { margin: "4px 0 0 0", fontSize: "1rem", fontWeight: 500, color: "#d1d1f0" },
+    figure: { margin: "0", display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 1, minHeight: 0 },
+    image: { maxHeight: "110px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))", flexShrink: 1 },
+    description: { margin: "8px 0 0 0", fontSize: "1.1rem", fontStyle: "italic", color: "#eee" },
+    degrees: { margin: "0", fontSize: "clamp(2rem, 5vh, 3rem)", fontWeight: "bold", flexShrink: 1 },
     minmaxContainer: {
       width: "100%",
       display: "flex",
       justifyContent: "center",
       gap: "24px",
-      marginBottom: "20px",
+      paddingBottom: "10px",
       borderBottom: "1px solid rgba(255,255,255,0.1)",
-      paddingBottom: "20px"
+      flexShrink: 1
     },
     minmaxBox: { display: "flex", flexDirection: "column", alignItems: "center" },
     minmaxTitle: { margin: 0, fontSize: "0.9rem", color: "#d1d1f0" },
     minmaxValue: { margin: "4px 0 0", fontSize: "1.2rem", fontWeight: "bold" },
     separator: { width: "2px", backgroundColor: "rgba(255,255,255,0.2)" },
-    
     forecastGrid: {
       width: "100%",
       display: "flex",
@@ -141,8 +139,7 @@ export function WeatherCard({
       background: "rgba(0, 0, 0, 0.25)",
       borderRadius: "12px",
       padding: "16px",
-      scrollbarWidth: "none", 
-      msOverflowStyle: "none", 
+      flexShrink: 0
     },
     forecastCol: { 
       display: "flex", 
@@ -181,34 +178,8 @@ export function WeatherCard({
 
   return (
     <div style={styles.container}>
-      <style>
-        {`
-          .responsive-card {
-            max-width: 380px;
-            transition: max-width 0.3s ease;
-          }
-          .responsive-card::-webkit-scrollbar {
-            display: none;
-          }
-          
-          .forecast-scroll-container {
-            overflow-x: auto;
-          }
-          
-          .forecast-scroll-container::-webkit-scrollbar {
-            display: none;
-          }
-
-          @media (min-width: 768px) {
-            .responsive-card {
-              max-width: 600px;
-            }
-          }
-        `}
-      </style>
-
       <section className="responsive-card" style={styles.card} aria-label="Weather Information">
-        <header style={{ textAlign: "center" }}>
+        <header style={styles.headerBox}>
           <h2 style={styles.city}>{city}</h2>
           {country && <p style={styles.country}>{country}</p>}
         </header>
