@@ -105,10 +105,32 @@ export function WeatherCard({
       padding: "16px 24px",
       overflow: "hidden",
     },
+    loadingErrorCard: {
+      width: "100%",
+      height: "100%",
+      borderRadius: "12px",
+      backgroundColor: "#200b64",
+      backgroundImage: "url('../assets/images/clouds.png')",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      backgroundBlendMode: "soft-light",
+      boxShadow: "0 12px 32px rgba(0, 0, 0, 0.25)",
+      color: "white",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "24px",
+      padding: "16px 24px",
+      overflow: "hidden",
+    },
     status: {
       fontSize: "1.2rem",
       color: "#d1d1f0",
       textAlign: "center",
+      fontWeight: 500,
+      margin: 0
     },
     error: { color: "#ff6b6b", fontWeight: 500 },
     headerBox: { textAlign: "center", flexShrink: 1, display: "flex", flexDirection: "column", justifyContent: "center" },
@@ -155,10 +177,21 @@ export function WeatherCard({
     forecastTempMin: { fontSize: "0.9rem", color: "#a0a0c0" }
   };
 
+  const getLoadingText = (lang) => {
+    switch (lang) {
+      case "pt": return "Buscando previsão...";
+      case "es": return "Consultando el clima...";
+      default: return "Fetching weather...";
+    }
+  };
+
   if (isLoading) {
     return (
       <div style={styles.container}>
-        <section className="responsive-card" style={{ ...styles.card, ...styles.status }}>Loading weather data...</section>
+        <section className="responsive-card" style={styles.loadingErrorCard}>
+          <img src={noResultIcon} alt="Loading" className="loading-icon" />
+          <h2 style={styles.status}>{getLoadingText(language)}</h2>
+        </section>
       </div>
     );
   }
@@ -166,7 +199,9 @@ export function WeatherCard({
   if (error) {
     return (
       <div style={styles.container}>
-        <section className="responsive-card" style={{ ...styles.card, ...styles.status, ...styles.error }}>{error}</section>
+        <section className="responsive-card" style={styles.loadingErrorCard}>
+          <span style={{ ...styles.status, ...styles.error }}>{error}</span>
+        </section>
       </div>
     );
   }
