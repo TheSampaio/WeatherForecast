@@ -55,19 +55,12 @@ const globalStyles = `
   }
 `;
 
-const extractCity = (address) => {
-  if (!address) return "Unknown City";
-  return (
-    address.city ||
-    address.town ||
-    address.village ||
-    address.hamlet ||
-    address.municipality ||
-    address.county ||
-    address.state ||
-    address.country ||
-    "Unknown City"
-  );
+const formatLocation = (address) => {
+  if (!address) return { city: "Unknown City", state: "", country: "" };
+  const city = address.city || address.town || address.village || address.hamlet || address.municipality || "Unknown City";
+  const state = address.state || "";
+  const country = address.country || "";
+  return { city, state, country };
 };
 
 export default function App() {
@@ -82,26 +75,47 @@ export default function App() {
 
     try {
       let latitude, longitude;
+      let prefilledLocation = null;
 
-      if (query.includes(",")) {
+      if (typeof query === "object" && query.latitude) {
+        latitude = query.latitude;
+        longitude = query.longitude;
+        prefilledLocation = {
+          address: {
+            city: query.name,
+            state: query.admin1,
+            country: query.country
+          }
+        };
+      } else if (typeof query === "string" && query.includes(",")) {
         [latitude, longitude] = query.split(",").map((coord) => coord.trim());
       } else {
-        const geocodeURL = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+        const geocodeURL = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1`;
         const geocodeRes = await axios.get(geocodeURL);
-        const result = geocodeRes.data[0];
-
-        if (!result) throw new Error("City not found");
-
-        latitude = result.lat;
-        longitude = result.lon;
+        
+        if (!geocodeRes.data.results || !geocodeRes.data.results.length) throw new Error("City not found");
+        
+        const res = geocodeRes.data.results[0];
+        latitude = res.latitude;
+        longitude = res.longitude;
+        prefilledLocation = {
+          address: {
+            city: res.name,
+            state: res.admin1,
+            country: res.country
+          }
+        };
       }
 
-      const [locationRes, weatherRes] = await Promise.all([
-        axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`),
-        axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_min,temperature_2m_max&timezone=auto&forecast_days=8`)
-      ]);
+      const weatherRes = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_min,temperature_2m_max&timezone=auto&forecast_days=8`);
 
-      setLocationData(locationRes.data);
+      let finalLocation = prefilledLocation;
+      if (!finalLocation) {
+        const locationRes = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+        finalLocation = locationRes.data;
+      }
+
+      setLocationData(finalLocation);
       setWeatherData(weatherRes.data);
     } catch (err) {
       setError(err.message || "Failed to fetch weather data.");
@@ -121,16 +135,21 @@ export default function App() {
     }
   }, [fetchWeatherForCity]);
 
-  const city = extractCity(locationData?.address);
-  const country = locationData?.address?.country ?? "";
+  const loc = formatLocation(locationData?.address);
+  
+  // NOVA FORMATAÇÃO: O país agora engloba o estado, caso exista.
+  // Ex: "Rio de Janeiro, Brazil" ou só "Brazil" se não houver estado mapeado.
+  const displayCountry = loc.state && loc.state !== loc.city 
+    ? `${loc.state}, ${loc.country}` 
+    : loc.country;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
       <style>{globalStyles}</style>
       <main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <SearchPage
-          country={country}
-          city={city}
+          country={displayCountry}
+          city={loc.city}
           currentTemperature={Math.floor(weatherData?.current?.temperature_2m ?? 0)}
           weatherCode={weatherData?.current?.weather_code ?? -1}
           minTemperature={Math.floor(weatherData?.daily?.temperature_2m_min[0] ?? 0)}
