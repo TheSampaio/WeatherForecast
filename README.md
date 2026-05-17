@@ -2,7 +2,7 @@
 
 A single-page application (SPA) built with **React** and **Vite** that delivers real-time weather forecasts with a clean and responsive user interface.
 
-🌐 **Official Website**: [https://clima.cairox.com.br](https://clima.cairox.com.br)
+🌐 **Official Website**: [https://cairox-weatherforecast.netlify.app](https://cairox-weatherforecast.netlify.app)
 
 ![Website screenshot](./.github/showcase-weather-forecast-spa.jpg)
 
